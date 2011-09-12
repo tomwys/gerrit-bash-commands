@@ -40,6 +40,7 @@ function branch_push_heads {
 }
 
 function branch_checkout {
+    _branch_check_if_active || return 1
     git fetch -p && git checkout "origin/$CURRENT_BRANCH"
 }
 
