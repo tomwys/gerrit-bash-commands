@@ -1,3 +1,4 @@
+# Author: Tomasz Wysocki <tomasz@wysocki.info>
 function workonbranch {
     if [ "$1" = "" ]
     then
@@ -45,6 +46,8 @@ function branch_checkout {
 }
 
 _workonbranch() {
+    # bash-completion for workonbranch
+    # based on: http://devmanual.gentoo.org/tasks-reference/completion/index.html
     local cur prev opts
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
