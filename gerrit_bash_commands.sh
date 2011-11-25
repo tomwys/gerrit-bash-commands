@@ -32,12 +32,12 @@ function _branch_check_if_active {
 
 function branch_push_for {
     _branch_check_if_active || return 1
-    git push origin "HEAD:refs/for/$CURRENT_BRANCH"
+    git push origin "HEAD:refs/for/$CURRENT_BRANCH" $@
 }
 
 function branch_push_heads {
     _branch_check_if_active || return 1
-    git push origin "HEAD:refs/heads/$CURRENT_BRANCH"
+    git push origin "HEAD:refs/heads/$CURRENT_BRANCH" $@
 }
 
 function branch_checkout {
