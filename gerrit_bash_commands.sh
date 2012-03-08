@@ -41,6 +41,10 @@ function branch_push_heads {
 }
 
 function branch_checkout {
+    if [ "$1" != "" ]
+    then
+        workonbranch $1
+    fi
     _branch_check_if_active || return 1
     git fetch -p && git checkout "origin/$CURRENT_BRANCH"
 }
@@ -60,3 +64,4 @@ _workonbranch() {
     fi
 }
 complete -F _workonbranch workonbranch
+complete -F _workonbranch branch_checkout
