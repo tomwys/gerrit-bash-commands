@@ -49,8 +49,17 @@ function branch_checkout {
     git fetch -p && git checkout "origin/$CURRENT_BRANCH"
 }
 
-_workonbranch() {
-    # bash-completion for workonbranch
+function close_branch {
+    if [ "$1" = "" ]
+    then
+        echo "close_branch [branch name]"
+        exit 1
+    fi
+    branch_checkout master && git merge origin/$1 --no-ff && branch_push_heads && git push origin :refs/heads/$1
+}
+
+_complete_branch() {
+    # bash-completion for branch name
     # based on: http://devmanual.gentoo.org/tasks-reference/completion/index.html
     local cur prev opts
     COMPREPLY=()
@@ -63,5 +72,6 @@ _workonbranch() {
         return 0
     fi
 }
-complete -F _workonbranch workonbranch
-complete -F _workonbranch branch_checkout
+complete -F _complete_branch workonbranch
+complete -F _complete_branch branch_checkout
+complete -F _complete_branch close_branch
