@@ -40,6 +40,11 @@ function branch_push_heads {
     git push origin "HEAD:refs/heads/$CURRENT_BRANCH" $@
 }
 
+function branch_push_drafts {
+    _branch_check_if_active || return 1
+    git push origin "HEAD:refs/drafts/$CURRENT_BRANCH" $@
+}
+
 function branch_checkout {
     if [ "$1" != "" ]
     then
