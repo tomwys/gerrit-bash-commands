@@ -31,8 +31,21 @@ function _branch_check_if_active {
 }
 
 function branch_push_for {
+    OPTIND=0
+    RECIVE_PACK='git receive-pack'
+    while getopts "r:" O; do
+        case "$O" in
+          r)
+            RECIVE_PACK="$RECIVE_PACK --reviewer $OPTARG"
+            ;;
+          c)
+            RECIVE_PACK="$RECIVE_PACK --cc $OPTARG"
+            ;;
+        esac
+    done;
+    shift $((OPTIND-1));
     _branch_check_if_active || return 1
-    git push origin "HEAD:refs/for/$CURRENT_BRANCH" $@
+    git push --receive-pack="$RECIVE_PACK" origin "HEAD:refs/for/$CURRENT_BRANCH" $@
 }
 
 function branch_push_heads {
@@ -77,6 +90,21 @@ _complete_branch() {
         return 0
     fi
 }
+_complete_user() {
+    # bash-completion for git user
+    # based on: http://devmanual.gentoo.org/tasks-reference/completion/index.html
+    local cur prev opts
+    COMPREPLY=()
+    prev="${COMP_WORDS[$COMP_CWORD-1]}"
+    cur="${COMP_WORDS[$COMP_CWORD]}"
+
+    if [ "$prev" = "-r" -o "$prev" = "-c" ] ; then
+        opts=$(git log --pretty=format:'%ae' | sort | uniq)
+        COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+        return 0
+    fi
+}
 complete -F _complete_branch workonbranch
 complete -F _complete_branch branch_checkout
 complete -F _complete_branch close_branch
+complete -F _complete_user branch_push_for
